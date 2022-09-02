@@ -154,3 +154,8 @@
   font-weight: 500;
 
 }
+
+.buttonSecondary {
+  background-color: #ddd;
+  border:brown;
+}

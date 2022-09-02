@@ -1,13 +1,15 @@
-import React from "react";
+import React,{useContext} from "react";
 import NavbarUser from "../components/navbar";
 import { DataProfil } from "../datadummy/dataprofil";
 import { Container, Col, Row } from "react-bootstrap";
 import { DataTransaction } from "../datadummy/datatransaction";
 import Transaction from "../components/Transaction";
+import { Usercontext } from "../context/usercontext";
 
 function Profile() {
   let { data } = DataTransaction;
   console.log(data);
+  const [state, dispatch] = useContext(Usercontext);
   return (
     <div>
       <NavbarUser />
@@ -18,8 +20,8 @@ function Profile() {
               My Profile
             </h2>
             <Row>
-              {DataProfil.map((item, index) => {
-                return (
+              
+              
                   <div>
                     <Row>
                       <Col className="" sm={6}>
@@ -29,24 +31,24 @@ function Profile() {
                             height: "auto",
                             borderRadius: "5px",
                           }}
-                          src={item.photo}
+                          src={'http://localhost:5000/uploads/'+ state.user.image}
                         />
                       </Col>
                       <Col sm={6}>
                         <div>
                           <h3 style={{ color: "#BD0707" }}>Full Name</h3>
-                          <p>{item.name}</p>
+                          <p>{state.user.fullname}</p>
                         </div>
 
                         <div className="mt-4">
                           <h3 style={{ color: "#BD0707" }}>Email</h3>
-                          <p>{item.email}</p>
+                          <p>{state.user.email}</p>
                         </div>
                       </Col>
                     </Row>
                   </div>
-                );
-              })}
+                
+              
             </Row>
           </Col>
           <Col md={6} className="mt-3">

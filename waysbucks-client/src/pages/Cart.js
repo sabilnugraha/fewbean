@@ -6,7 +6,7 @@ import Icon from "../assets/TrashIcon.png";
 import convertRupiah from "rupiah-format";
 import { useState } from "react";
 import { API } from "../config/api";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Usercontext } from "../context/usercontext";
 import { useEffect } from "react";
 import { useMutation } from "react-query";
@@ -168,6 +168,7 @@ console.log(carts);
       const body = JSON.stringify(address);
 
       await API.patch('/user/' + idUser, body, config);
+      setCheckAddress(true)
 
     } catch (error) {
       console.log(error);
@@ -176,20 +177,28 @@ console.log(carts);
 
 
   const handleSubmit = useMutation(async (e) => {
-    const config = {
+    try {
+       const config = {
       headers: {
         "Content-type": "application/json",
       },
     };
     // Insert transaction data
-    const body = JSON.stringify(form);
+    const body = JSON.stringify({
+        Total : resultTotal
+      })
+      const respons = await API.post("/transaction", body, config);
+    const idTrans = respons.data.data.id
+    console.log(idTrans);
 
-    const response = await API.patch("/transaction", body, config);
-    console.log(response.data.data.token);
+    for (let i = 0; i < carts.length; i++) {
+        await API.patch(`/carttrans/${carts[i].id}`, { "transaction_id": idTrans }, config)
+      }
 
-    const token = response.data.data.token;
+      const snap = await API.get(`/snap/${idTrans}`)
+      const token = snap.data.data.token;
 
-    window.snap.pay(token, {
+      window.snap.pay(token, {
       onSuccess: function (result) {
         /* You may add your own implementation here */
         console.log(result);
@@ -209,6 +218,10 @@ console.log(carts);
         alert("you closed the popup without finishing the payment");
       },
     });
+      
+    } catch (error) {
+      
+    }
   });
   
 
@@ -263,14 +276,7 @@ console.log(carts);
                             <p>{convertRupiah.convert(item?.product?.price * item?.qty)}</p>
                           </Col>
                           <Col className="d-flex justify-content-between">
-                            {/* <CounterInput
-                              count={1}
-                              min={1}
-                              max={10}
-                              // onCountChange={count(item.id) => setQty(count)}
-                              onClick={()=> handleDecrement(item.id)}
-                          
-                              /> */}
+                            
                               <button onClick={() => handleDecrement(item.id, item.qty, item.subtotal, item.product.price)}>-</button>
                               <div>{item?.qty}</div>
                               <button onClick={(id, qty) => handleIncrement(item.id, item.qty, item.subtotal, item.product.price)}>+</button>
@@ -349,6 +355,7 @@ console.log(carts);
         <div className="address p-3">
         <h3 className="TextHeader">Set Your Address</h3>
                   {checkAddress? <div>
+            
                     <p className="textTitle mt-1">Address</p>
                     {address.Address}
                     <p className="textTitle mt-3">City</p>
@@ -357,9 +364,24 @@ console.log(carts);
                     {address.PostCode}
                     <p className="textTitle mt-3">Phone</p>
                     {address.Phone}
-                    <Button onClick={() => setCheckAddress(false)} style={{ width: "100%", backgroundColor: "brown" }}>
+                    <Button className="mt-4" onClick={() => setCheckAddress(false)} style={{ width: "100%", backgroundColor: "#D4B996FF", borderBlockColor: "#D4B996FF"  }}>
           Edit
         </Button>
+        <button
+                  type="button"
+                  className="pt-2 pb-2 mt-2"
+                  style={{
+                    width: "100%",
+                    color: "white",
+                    backgroundColor: "brown",
+                    borderColor: "red",
+                    borderRadius: "5px",
+                  }}
+                  onClick={(e) => handleSubmit.mutate(e)}
+                
+                >
+                  PAY
+                </button>
 
                   </div> : <Form onSubmit={(e) => handleSubmitAddress.mutate(e)}>
         <Form.Group className="mb-3">
@@ -412,7 +434,7 @@ console.log(carts);
         </Form.Group>
 
         <Button type="submit" style={{ width: "100%", backgroundColor: "brown" }}>
-          PAY
+          SAVE
         </Button>
       </Form> }
         
