@@ -43,6 +43,7 @@ export default function Admin() {
                 <th>Name</th>
                 <th>Address</th>
                 <th>Post Code</th>
+                <th>Products Order</th>
                 <th>Income</th>
                 <th>Status</th>
               </tr>
@@ -51,10 +52,16 @@ export default function Admin() {
               return (
                 <tbody key={index}>
                   <tr onClick={handleShow}>
-                    <td>{item.user_id}</td>
+                    <td>{index + 1}</td>
                     <td>{item.user.fullname}</td>
                     <td>{item.user.address}</td>
                     <td>{item.user.postcode}</td>
+                    <td>{item.carts.map((item, index)=>{
+                    return(
+                      <span key={index}>{(index ? ', ' : '') + item.product.name}</span>
+                    )
+                    }
+                    )}</td>
                     <td>{convertRupiah.convert(item.total)}</td>
                     <td
                       className={
@@ -78,7 +85,7 @@ export default function Admin() {
           </Table>
         </Container>
       </div>
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleClose} >
         <Transaction />
       </Modal>
     </div>

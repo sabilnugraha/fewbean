@@ -81,7 +81,7 @@ function LoginAuth() {
             name="email"
             value={email}
             onChange={handleChange}
-            style={{ borderColor: "red" }}
+            style={{ borderColor: "brown" }}
             autoFocus
           />
         </Form.Group>
@@ -93,12 +93,12 @@ function LoginAuth() {
             name="password"
             value={password}
             onChange={handleChange}
-            style={{ borderColor: "red" }}
+            style={{ borderColor: "brown" }}
             autoFocus
           />
         </Form.Group>
 
-        <Button type="submit" style={{ width: "100%", backgroundColor: "red" }}>
+        <Button type="submit" style={{ width: "100%", backgroundColor: "brown" }}>
           Login
         </Button>
       </Form>

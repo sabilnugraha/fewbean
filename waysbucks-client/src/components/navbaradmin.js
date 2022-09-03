@@ -41,10 +41,10 @@ function NavbarAdmin() {
   };
 
   return (
-    <div>
-      <div>
-        <Container className="">
-          <Navbar className="navbar mt-5 d-flex justify-content-between ">
+    
+      
+        
+          <Navbar className="d-flex justify-content-between sticky-top ps-3 ">
             <Nav className="">
               <img
                 onClick={handleHome}
@@ -53,8 +53,8 @@ function NavbarAdmin() {
                 alt=""
               />
             </Nav>
-            <Nav className="">
-              <div>
+            <Nav className="me-5">
+              <div className="me-4">
                 <div>
                   {DataProfil.map((item, index) => {
                     return (
@@ -138,9 +138,9 @@ function NavbarAdmin() {
               </div>
             </Nav>
           </Navbar>
-        </Container>
-      </div>
-    </div>
+        
+      
+    
   );
 }
 

@@ -196,13 +196,7 @@ console.log(carts);
     const idTrans = respons.data.data.id
     console.log(idTrans);
 
-    for (let i = 0; i < carts.length; i++) {
-        await API.patch(`/carttrans/${carts[i].id}`, { "transaction_id": idTrans }, config)
-      }
-
-      for (let a = 0; a < carts.length; a++) {
-        await API.patch(`/stock/${carts[a].product_id}`, { "stock": carts[a].stockproduct }, config)
-      }
+    
 
       const snap = await API.get(`/snap/${idTrans}`)
       const token = snap.data.data.token;
@@ -210,6 +204,13 @@ console.log(carts);
       window.snap.pay(token, {
       onSuccess: function (result) {
         /* You may add your own implementation here */
+        for (let i = 0; i < carts.length; i++) {
+        API.patch(`/carttrans/${carts[i].id}`, { "transaction_id": idTrans }, config)
+      }
+
+      for (let a = 0; a < carts.length; a++) {
+        API.patch(`/stock/${carts[a].product_id}`, { "stock": carts[a].stockproduct }, config)
+      }
         console.log(result);
         navigate("/profile");
       },
@@ -238,7 +239,7 @@ console.log(carts);
     //change this to the script source you want to load, for example this is snap.js sandbox env
     const midtransScriptUrl = "https://app.sandbox.midtrans.com/snap/snap.js";
     //change this according to your client-key
-    const myMidtransClientKey = "Client key here ...";
+    const myMidtransClientKey = process.env.REACT_APP_MIDTRANS_CLIENT_KEY;
 
     let scriptTag = document.createElement("script");
     scriptTag.src = midtransScriptUrl;
@@ -270,7 +271,7 @@ console.log(carts);
                       <Row>
                         <Col  key={index} md={2}>
                           <img
-                            src={`http://localhost:5000/uploads/${item?.product?.image}`}
+                            src={item?.product?.image}
                             alt=""
                             style={{ width: "100%" }}
                           />

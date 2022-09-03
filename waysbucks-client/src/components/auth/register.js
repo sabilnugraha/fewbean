@@ -90,7 +90,7 @@ function RegisterAuth() {
             id="fullname"
             onChange={handleChange}
             placeholder="fullname"
-            style={{ borderColor: "red" }}
+            style={{ borderColor: "brown" }}
             autoFocus
           />
         </Form.Group>
@@ -101,7 +101,7 @@ function RegisterAuth() {
             id="email"
             placeholder="email"
             onChange={handleChange}
-            style={{ borderColor: "red" }}
+            style={{ borderColor: "brown" }}
             autoFocus
           />
         </Form.Group>
@@ -112,11 +112,11 @@ function RegisterAuth() {
             id="password"
             placeholder="password"
             onChange={handleChange}
-            style={{ borderColor: "red" }}
+            style={{ borderColor: "brown" }}
             autoFocus
           />
         </Form.Group>
-        <Button type="submit" style={{ width: "100%", backgroundColor: "red" }}>
+        <Button type="submit" style={{ width: "100%", backgroundColor: "brown" }}>
           Register
         </Button>
       </Form>
