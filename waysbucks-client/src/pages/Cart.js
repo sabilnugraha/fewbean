@@ -103,7 +103,7 @@ export default function Cart() {
 
   const handleShowAddress = () => setShowAddress(true);
 
-  const handleDecrement = async(id, qty, subtotal, price) => {
+  const handleDecrement = async(id, qty, subtotal, price, stockproduct, stock) => {
      const config = {
       headers: {
         "Content-type": "application/json",
@@ -118,11 +118,13 @@ export default function Cart() {
     const newQty = qty - 1
     
     const newTotal = subtotal - price * newQty
+    const newStock = stock - newQty
     console.log(newTotal);
     console.log(subtotal);
     const body = JSON.stringify({
         Qty : newQty,
-        SubTotal : newTotal * newQty
+        SubTotal : newTotal * newQty,
+        Stockproduct : newStock
       })
     await API.patch(`/cart/${id}`, body, config)
     const response = await API.get("/carts-id");
@@ -133,7 +135,7 @@ export default function Cart() {
 console.log(carts);
   
 
-  const handleIncrement = async(id, qty, subtotal, price) => {
+  const handleIncrement = async(id, qty, subtotal, price, stockproduct, stock) => {
      const config = {
       headers: {
         "Content-type": "application/json",
@@ -143,9 +145,11 @@ console.log(carts);
     console.log(qty);
     const newQty = qty + 1
     const newTotal = price * newQty
+    const newStock = stock - newQty
     const body = JSON.stringify({
         Qty : newQty,
-        SubTotal : newTotal
+        SubTotal : newTotal,
+        Stockproduct : newStock
       })
     await API.patch(`/cart/${id}`, body, config)
     const response = await API.get("/carts-id");
@@ -175,6 +179,7 @@ console.log(carts);
     }
   });
 
+  
 
   const handleSubmit = useMutation(async (e) => {
     try {
@@ -193,6 +198,10 @@ console.log(carts);
 
     for (let i = 0; i < carts.length; i++) {
         await API.patch(`/carttrans/${carts[i].id}`, { "transaction_id": idTrans }, config)
+      }
+
+      for (let a = 0; a < carts.length; a++) {
+        await API.patch(`/stock/${carts[a].product_id}`, { "stock": carts[a].stockproduct }, config)
       }
 
       const snap = await API.get(`/snap/${idTrans}`)
@@ -277,9 +286,9 @@ console.log(carts);
                           </Col>
                           <Col className="d-flex justify-content-between">
                             
-                              <button onClick={() => handleDecrement(item.id, item.qty, item.subtotal, item.product.price)}>-</button>
+                              <button onClick={() => handleDecrement(item.id, item.qty, item.subtotal, item.product.price, item.stockproduct, item.product.stock)}>-</button>
                               <div>{item?.qty}</div>
-                              <button onClick={(id, qty) => handleIncrement(item.id, item.qty, item.subtotal, item.product.price)}>+</button>
+                              <button onClick={(id, qty) => handleIncrement(item.id, item.qty, item.subtotal, item.product.price, item.stockproduct, item.product.stock)}>+</button>
                               
                             <img
                               src={Icon}

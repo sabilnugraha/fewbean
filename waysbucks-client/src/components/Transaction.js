@@ -66,7 +66,9 @@ export default function Transaction() {
       <p style={{fontSize: "13px",
         color: "#BD0707"}}><b>{dateFormat(cart?.updated_at, 'dddd,')}</b>  {dateFormat(cart?.updated_at, 'd mmmm yyyy')} </p>
         <span style={{fontSize: "13px",
-        color: "#BD0707"}}><strong>Topping</strong></span><span> :</span>
+        color: "#BD0707"}}><strong>Qty</strong></span><span> :</span>
+        <span style={{fontSize: "13px",
+        color: "#BD0707"}}><strong>{cart?.qty}</strong></span>
         
         <p style={{fontSize: "15px",
         color: "#BD0707"}}>Price : {convertRupiah.convert(cart?.subtotal)}</p><span style={{fontSize: "15px",
