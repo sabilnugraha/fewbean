@@ -244,7 +244,7 @@ console.log(carts);
   }, []);
 
   return (
-    <div>
+    <div className="carts">
       <NavbarUser />
       <div>
         <Container>
@@ -252,14 +252,14 @@ console.log(carts);
             <h1 style={{ color: "#BD0707" }}>My Cart</h1>
             <Row>
               <p style={{ color: "#BD0707" }}>Review Your Order</p>
-              <Col md={8}>
+              <Col  className='cartTrans' md={7}>
                 <hr />
 
                 {carts.map((item, index) => {
                   return (
                     <div className="mb-2">
                       <Row>
-                        <Col key={index} md={2}>
+                        <Col  key={index} md={2}>
                           <img
                             src={`http://localhost:5000/uploads/${item?.product?.image}`}
                             alt=""
@@ -297,7 +297,7 @@ console.log(carts);
                 })}
               
               </Col>
-              <Col md={4}>
+              <Col md={4} className='cartTrans ms-2'>
                 
                 
                     <>

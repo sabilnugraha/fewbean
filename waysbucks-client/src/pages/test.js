@@ -2,19 +2,22 @@ import React from "react";
 import { Container, Col, Row } from "react-bootstrap";
 import NavbarAdmin from "../components/navbaradmin";
 import Pin from "../assets/pin.png";
+import Empty from "../assets/empty.svg"
 import { useState } from "react";
 import { API } from "../config/api";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 
 function Test() {
-  const [preview, setPreview] = useState(null); //For image preview
+  const [preview, setPreview] = useState(false); //For image preview
   let navigate = useNavigate();
 
   const [form, setForm] = useState({
     image: "",
-    title: "",
+    name: "",
     price: "",
+    stock: "",
+    desc: "",
   }); //Store product data
 
   const handleChange = (e) => {
@@ -45,8 +48,10 @@ function Test() {
       // Store data with FormData as object
       const formData = new FormData();
       formData.set("image", form.image[0], form.image[0].name);
-      formData.set("title", form.title);
+      formData.set("name", form.name);
       formData.set("price", form.price);
+      formData.set("stock", form.stock);
+      formData.set("desc", form.desc);
 
       // Configuration
 
@@ -75,10 +80,26 @@ function Test() {
                   <input
                     className="mb-5 pt-2 pb-2 ps-1"
                     type="text"
-                    name="title"
-                    id="title"
+                    name="name"
+                    id="name"
                     placeholder="Name Product"
                     onChange={handleChange}
+                    style={{
+                      width: "100%",
+                      borderRadius: "5px",
+                      borderColor: "#BD0707",
+                      backgroundColor: "#DCDCDC",
+                    }}
+                  />
+                </Col>
+                <Col>
+                  <input
+                    className="mb-5 pt-2 pb-2 ps-1"
+                    type="text"
+                    placeholder="Stock"
+                    name="stock"
+                    onChange={handleChange}
+                    id="price"
                     style={{
                       width: "100%",
                       borderRadius: "5px",
@@ -104,11 +125,27 @@ function Test() {
                   />
                 </Col>
                 <Col>
+                  <textarea
+                    className="mb-5 pt-2 pb-2 ps-1"
+                    type="text"
+                    placeholder="Description"
+                    name="desc"
+                    onChange={handleChange}
+                    id="desc"
+                    style={{
+                      width: "100%",
+                      borderRadius: "5px",
+                      borderColor: "#BD0707",
+                      backgroundColor: "#DCDCDC",
+                    }}
+                  />
+                </Col>
+                <Col>
                   <label
                     className="mb-5 pt-2 pb-2 ps-1 pe-1 d-flex justify-content-between align-item-center"
                     htmlFor="image"
                     style={{
-                      width: "100%",
+                      width: "50%",
                       borderRadius: "5px",
                       border: "2px solid #BD0707",
                       color: "#757575",
@@ -125,6 +162,7 @@ function Test() {
                     onChange={handleChange}
                     placeholder="Photo Product"
                     name="image"
+                    hidden
                   />
                 </Col>
                 <Col className="d-flex justify-content-center">
@@ -134,9 +172,9 @@ function Test() {
                     style={{
                       width: "90%",
                       borderRadius: "5px",
-                      backgroundColor: "red",
+                      backgroundColor: "brown",
                       color: "white",
-                      borderColor: "red",
+                      borderColor: "brown",
                     }}
                   >
                     Add Product
@@ -145,13 +183,22 @@ function Test() {
               </form>
             </Col>
             <Col md={5}>
-              {preview && (
+              {preview? <img
+                  src={preview}
+                  alt=""
+                  style={{ width: "100%", borderRadius: "5px" }}
+                /> : <img
+                  src={Empty}
+                  alt=""
+                  style={{ width: "100%", borderRadius: "5px" }}
+                />}
+              {/* {preview && (
                 <img
                   src={preview}
                   alt=""
                   style={{ width: "100%", borderRadius: "5px" }}
                 />
-              )}
+              )} */}
             </Col>
           </Row>
         </Container>

@@ -6,6 +6,8 @@ import convertRupiah from "rupiah-format";
 import { Usercontext } from "../context/usercontext";
 import { useState } from "react";
 import Transaction from "../components/Transaction";
+import { useEffect } from "react";
+import { API } from "../config/api";
 
 export default function Admin() {
   const [state, dispatch] = useContext(Usercontext);
@@ -14,6 +16,20 @@ export default function Admin() {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [transaction, setTransaction] = useState([])
+  useEffect(() => {
+    const dataproduct = async () => {
+      try {
+        const response = await API.get("/transactions");
+        setTransaction(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    dataproduct();
+  }, [setTransaction]);
+  console.log(transaction);
 
   return (
     <div>
@@ -31,15 +47,15 @@ export default function Admin() {
                 <th>Status</th>
               </tr>
             </thead>
-            {IncomeTransaction.map((item, index) => {
+            {transaction.map((item, index) => {
               return (
-                <tbody>
+                <tbody key={index}>
                   <tr onClick={handleShow}>
-                    <td>{item.no}</td>
-                    <td>{item.name}</td>
-                    <td>{item.address}</td>
-                    <td>{item.postCode}</td>
-                    <td>{convertRupiah.convert(item.income)}</td>
+                    <td>{item.user_id}</td>
+                    <td>{item.user.fullname}</td>
+                    <td>{item.user.address}</td>
+                    <td>{item.user.postcode}</td>
+                    <td>{convertRupiah.convert(item.total)}</td>
                     <td
                       className={
                         item.status === "Success"

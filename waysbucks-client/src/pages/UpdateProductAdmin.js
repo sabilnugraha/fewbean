@@ -15,10 +15,14 @@ function UpdateProduct() {
 
   const { id } = useParams();
 
+  console.log(dataproduct);
   const [form, setForm] = useState({
     image: "",
-    title: "",
+    name: "",
     price: "",
+    stock: "",
+    desc: ""
+
   }); //Store product data
 
   //   let { productRefetch } = useQuery("productCache", async () => {
@@ -30,16 +34,21 @@ function UpdateProduct() {
   //     });
   //     setProduct(response.data);
   //   });
+
   useEffect(() => {
     const dataproduct = async () => {
       try {
         const response = await API.get("/product/" + id);
         setForm({
-          title: response.data.data.title,
+          name: response.data.data.name,
 
           price: response.data.data.price,
 
           image: response.data.data.image,
+
+          stock: response.data.data.stock,
+
+          desc: response.data.data.desc,
         });
 
         setDataproduct(response.data.data);
@@ -48,10 +57,23 @@ function UpdateProduct() {
       }
     };
     dataproduct();
-  }, [setDataproduct]);
+  }, [setProduct]);
+  useEffect(() => {
+    const dataproduct = async () => {
+      try {
+        const response = await API.get("/productimage/" + id);
+        
+
+        setProduct(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    dataproduct();
+  }, [setProduct]);
 
   console.log(id);
-  console.log(form);
+  console.log(product);
 
   const handleChange = (e) => {
     setForm({
@@ -74,7 +96,7 @@ function UpdateProduct() {
 
       const config = {
         headers: {
-          "Content-type": "multipart/form-data",
+          'Content-type': 'multipart/form-data',
         },
       };
 
@@ -84,14 +106,18 @@ function UpdateProduct() {
       if (form.image) {
         formData.set("image", form?.image[0], form?.image[0]?.name);
       }
+
       //  formData.set("image", form.image[0], form.image[0].name);
-      formData.set("title", form.title);
+      formData.set("name", form.name);
       formData.set("price", form.price);
+      formData.set("stock", form.stock);
+      formData.set("desc", form.desc);
 
       // Configuration
 
       // Insert product data
-      const response = await API.patch("/product/" + dataproduct.id, formData);
+      const response = await API.patch("/product/" + dataproduct.id, formData, config);
+      console.log(response.data);
       navigate("/productadmin");
     } catch (error) {
       console.log(error);
@@ -115,11 +141,28 @@ function UpdateProduct() {
                   <input
                     className="mb-5 pt-2 pb-2 ps-1"
                     type="text"
-                    name="title"
+                    name="name"
                     id="title"
-                    value={form.title}
+                    value={form.name}
                     placeholder="Name Product"
                     onChange={handleChange}
+                    style={{
+                      width: "100%",
+                      borderRadius: "5px",
+                      borderColor: "#BD0707",
+                      backgroundColor: "#DCDCDC",
+                    }}
+                  />
+                </Col>
+                <Col>
+                  <input
+                    className="mb-5 pt-2 pb-2 ps-1"
+                    type="text"
+                    placeholder="Stock"
+                    name="stock"
+                    value={form.stock}
+                    onChange={handleChange}
+                    id="price"
                     style={{
                       width: "100%",
                       borderRadius: "5px",
@@ -137,6 +180,23 @@ function UpdateProduct() {
                     onChange={handleChange}
                     value={form.price}
                     id="price"
+                    style={{
+                      width: "100%",
+                      borderRadius: "5px",
+                      borderColor: "#BD0707",
+                      backgroundColor: "#DCDCDC",
+                    }}
+                  />
+                </Col>
+                <Col>
+                  <textarea
+                    className="mb-5 pt-2 pb-2 ps-1"
+                    type="text"
+                    placeholder="Description"
+                    name="desc"
+                    value={form.desc}
+                    onChange={handleChange}
+                    id="desc"
                     style={{
                       width: "100%",
                       borderRadius: "5px",
@@ -167,6 +227,7 @@ function UpdateProduct() {
                     onChange={handleChange}
                     placeholder="Photo Product"
                     name="image"
+                    hidden
                   />
                 </Col>
                 <Col className="d-flex justify-content-center">
@@ -176,12 +237,12 @@ function UpdateProduct() {
                     style={{
                       width: "90%",
                       borderRadius: "5px",
-                      backgroundColor: "red",
+                      backgroundColor: "brown",
                       color: "white",
-                      borderColor: "red",
+                      borderColor: "brown",
                     }}
                   >
-                    Add Product
+                    Update
                   </button>
                 </Col>
               </form>

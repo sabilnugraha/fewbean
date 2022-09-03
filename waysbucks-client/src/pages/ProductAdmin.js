@@ -57,7 +57,9 @@ function ProductAdmin() {
   const deleteById = useMutation(async (id) => {
     try {
       await API.delete(`/product/${id}`);
-      refetch();
+      const response = await API.get("/products");
+        setDataproduct(response.data.data);
+      
     } catch (error) {
       console.log(error);
     }
@@ -72,6 +74,7 @@ function ProductAdmin() {
       deleteById.mutate(idDelete);
       setConfirmDelete(null);
     }
+     
   }, [confirmDelete]);
 
   return (
@@ -86,7 +89,9 @@ function ProductAdmin() {
               </th>
               <th>Photo</th>
               <th>Product Name</th>
+              <th>Stock</th>
               <th>Price</th>
+              <th>Desc</th>
 
               <th>Action</th>
             </tr>
@@ -106,11 +111,13 @@ function ProductAdmin() {
                     alt={item.title}
                   />
                 </td>
-                <td className="align-middle">{item.title}</td>
+                <td className="align-middle">{item.name}</td>
+                <td className="align-middle">{item.stock}</td>
 
                 <td className="align-middle">
                   {rupiahFormat.convert(item.price)}
                 </td>
+                <td className="align-middle">{item.desc.substring(0, 17)}...</td>
                 <td className="align-middle">
                   <Button
                     onClick={() => {
